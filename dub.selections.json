@@ -1,0 +1,9 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"cachetools": "0.3.1",
+		"gtk_d": "~main",
+		"requests": "2.0.1",
+		"tg_d": "~main"
+	}
+}

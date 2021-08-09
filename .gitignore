@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/stickbot
+stickbot.so
+stickbot.dylib
+stickbot.dll
+stickbot.a
+stickbot.lib
+stickbot-test-*
+*.exe
+*.o
+*.obj
+*.lst
