@@ -7,6 +7,7 @@
 #include <Magick++.h>
 
 #include <memory>
+#include <map>
 
 namespace kimp {
 
@@ -16,10 +17,16 @@ const unsigned long STICKER_SIZE = 512;
 ///> Contain`s avatar size
 const unsigned long AVATAR_SIZE  = 72;
 
+///> Padding for the sticker`s borders
+const unsigned long PADDING_SIZE = 25;
+
+///> Margin between sticker`s elements
+const unsigned long MARGIN_SIZE  = 20;
+
 /**
  * @brief Contains supported color presets for the sticker
  */
-enum Preset {
+enum PresetColor {
     VIOLET, GREEN, GRAY
 };
 
@@ -32,7 +39,7 @@ public:
      * Init the sticker object and complete Magick init
      * @param [in] preset Color preset for the sticker
      */
-    Sticker (const Preset preset = VIOLET);
+    Sticker (const PresetColor preset = VIOLET);
 
     /**
      * @brief Draws background gradient
@@ -57,7 +64,6 @@ public:
      * @param[in] path Path to the new file
      */
     void save (std::string path);
-
 private:
     /**
      * @brief Draws author`s avatar
@@ -73,9 +79,25 @@ private:
 
     ///> Image with the sticker
     std::unique_ptr<Magick::Image> stickerImage;
-    //Magick::Image * stickerImage;
     ///> Used color preset
-    Preset stickerPreset;
+    PresetColor stickerPreset;
+
+private:
+    /**
+     * @brief Representation of colored sticker preset
+     */
+    struct StickerPreset {
+        std::string backgroundGradient = ""; ///> String with command for generating background gradient
+        std::string nicknameColor      = ""; ///> String with color for nickname
+        std::string quoteColor         = ""; ///> String with color for the quite
+    };
+
+    ///> Map with prebuilt color presets
+    std::map<PresetColor, StickerPreset> presets = {
+        {VIOLET, StickerPreset{"gradient:#0d324d-#7f5a83", "#ea8df7","white"}},
+        {GREEN, StickerPreset()},
+        {GRAY, StickerPreset()}
+    };
 };
 
 } // namespace kimp

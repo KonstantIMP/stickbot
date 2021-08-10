@@ -6,7 +6,7 @@
 
 #include <tms.hpp>
 
-kimp::Sticker::Sticker (const Preset preset)  : stickerPreset {preset} { 
+kimp::Sticker::Sticker (const PresetColor preset)  : stickerPreset {preset} { 
     Magick::InitializeMagick(nullptr);
         
     stickerImage = std::unique_ptr<Magick::Image>(new Magick::Image (Magick::Geometry (STICKER_SIZE, STICKER_SIZE), Magick::Color ("transparent")));   
@@ -14,15 +14,7 @@ kimp::Sticker::Sticker (const Preset preset)  : stickerPreset {preset} {
 }
 
 void kimp::Sticker::fillBackground() {
-    if (stickerPreset == VIOLET) {
-        stickerImage->read("gradient:#6e45e1-#89d4cf");
-    }
-    else if (stickerPreset == GREEN) {
-        stickerImage->read("gradient:#80ff72-#7ee8fa");
-    }
-    else {
-        stickerImage->read("gradient:#d2ccc4-#2f4353");
-    }
+    stickerImage->read(presets[stickerPreset].backgroundGradient);
 }
 
 void kimp::Sticker::addAuthor(const std::string author, const std::string avatar) {
@@ -36,11 +28,11 @@ void kimp::Sticker::addText(const std::string text) {
     q->magick("png");
     q->fontFamily("Roboto");
     q->fontPointsize(18);
-    q->fillColor(Magick::Color("pink"));
+    q->fillColor(presets[stickerPreset].quoteColor);
     q->backgroundColor(Magick::Color("transparent"));
     q->read("CAPTION:" + text);
 
-    stickerImage->composite(*q, Magick::Geometry(0, 0, 25 + AVATAR_SIZE + 20, 25 + 28 + 12), Magick::OverlayCompositeOp);
+    stickerImage->composite(*q, Magick::Geometry(0, 0, PADDING_SIZE + AVATAR_SIZE + MARGIN_SIZE, PADDING_SIZE + MARGIN_SIZE * 2), Magick::OverCompositeOp);
 }
 
 void kimp::Sticker::addAvatar(const std::string avatar) {
@@ -48,7 +40,7 @@ void kimp::Sticker::addAvatar(const std::string avatar) {
     av->quality (Magick::NoCompression);
     av->scale(Magick::Geometry(AVATAR_SIZE, AVATAR_SIZE));
 
-    stickerImage->composite(*av, 25, 25);
+    stickerImage->composite(*av, PADDING_SIZE, PADDING_SIZE);
 }
 
 void kimp::Sticker::addNickname (const std::string author) {
@@ -56,22 +48,21 @@ void kimp::Sticker::addNickname (const std::string author) {
     stickerImage->fontStyle(Magick::StyleType::BoldStyle);
     stickerImage->fontPointsize(28);
 
-    if (stickerPreset == VIOLET) stickerImage->fillColor(Magick::Color("#ffffff"));
-    else if (stickerPreset == GREEN) stickerImage->fillColor(Magick::Color("#9400d3"));
-    else stickerImage->fillColor(Magick::Color("#ffffff")); 
+    stickerImage->fillColor(Magick::Color(presets[stickerPreset].nicknameColor));
 
-    stickerImage->annotate(author, Magick::Geometry (0, 0, AVATAR_SIZE + 25 + 20, 25));
+    stickerImage->annotate(author, Magick::Geometry (0, 0, AVATAR_SIZE + PADDING_SIZE + MARGIN_SIZE, PADDING_SIZE));
 }
 
 void kimp::Sticker::save(std::string path)  {
     stickerImage->write (path);
+    
 }
 
 int main (int argc, char ** argv) {
     kimp::Sticker * stick = new kimp::Sticker(kimp::VIOLET);
     stick->fillBackground();
     stick->addAuthor("KonstantIMP", "/home/kimp/Projects/stickBot/logo10.png");
-    stick->addText("Нюхой бебру!");
+    stick->addText("Когда-то, я подскользнулся на льду. Чтобы не упасть я выкрикрнул: \"Свинка Пеппа\". И это сработало!");
     stick->save("woof.png");
     return 0;
 }
