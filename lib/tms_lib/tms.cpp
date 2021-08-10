@@ -1,14 +1,13 @@
-#include "Magick++/Drawable.h"
-#include "Magick++/Geometry.h"
 #include "Magick++/Image.h"
-#include "Magick++/Include.h"
+#include <Magick++.h>
 #include <string>
+
 #include <tms.hpp>
 
 kimp::Sticker::Sticker (const Preset preset)  : stickerPreset {preset} { 
     Magick::InitializeMagick(nullptr);
         
-    stickerImage = new Magick::Image (Magick::Geometry (STICKER_SIZE, STICKER_SIZE), Magick::Color ("transparent"));   
+    stickerImage = std::unique_ptr<Magick::Image>(new Magick::Image (Magick::Geometry (STICKER_SIZE, STICKER_SIZE), Magick::Color ("transparent")));   
     stickerImage->magick("png"); stickerImage->quality(Magick::NoCompression);
 }
 
@@ -30,13 +29,11 @@ void kimp::Sticker::addAuthor(const std::string author, const std::string avatar
 }
 
 void kimp::Sticker::addAvatar(const std::string avatar) {
-    Magick::Image * av = new Magick::Image(avatar);
+    std::unique_ptr<Magick::Image> av = std::unique_ptr<Magick::Image>(new Magick::Image(avatar));
     av->quality (Magick::NoCompression);
     av->scale(Magick::Geometry(AVATAR_SIZE, AVATAR_SIZE));
 
     stickerImage->composite(*av, 25, 25);
-
-    delete av;
 }
 
 void kimp::Sticker::addNickname (const std::string author) {
@@ -53,10 +50,6 @@ void kimp::Sticker::addNickname (const std::string author) {
 
 void kimp::Sticker::save(std::string path)  {
     stickerImage->write (path);
-}
-
-kimp::Sticker::~Sticker() {
-    delete stickerImage;
 }
 
 int main (int argc, char ** argv) {

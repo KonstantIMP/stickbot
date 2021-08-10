@@ -6,6 +6,8 @@
 #include "Magick++/Include.h"
 #include <Magick++.h>
 
+#include <memory>
+
 namespace kimp {
 
 ///> Contains sticker`s size
@@ -50,10 +52,6 @@ public:
      */
     void save (std::string path);
 
-    /**
-     * @brief Free memory after using
-     */
-    ~Sticker ();
 private:
     /**
      * @brief Draws author`s avatar
@@ -68,7 +66,8 @@ private:
     void addNickname (const std::string author);
 
     ///> Image with the sticker
-    Magick::Image * stickerImage;
+    std::unique_ptr<Magick::Image> stickerImage;
+    //Magick::Image * stickerImage;
     ///> Used color preset
     Preset stickerPreset;
 };
