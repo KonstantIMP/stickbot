@@ -11,6 +11,9 @@ namespace kimp {
 ///> Contains sticker`s size
 const unsigned long STICKER_SIZE = 512;
 
+///> Contain`s avatar size
+const unsigned long AVATAR_SIZE  = 72;
+
 /**
  * @brief Contains supported color presets for the sticker
  */
@@ -57,6 +60,12 @@ private:
      * @param[in] avatar Path to the author`s avatar
      */
     void addAvatar (const std::string avatar);
+
+    /**
+     * @brief Draws author`s nickname
+     * @param[in] author Nickname for display
+     */
+    void addNickname (const std::string author);
 
     ///> Image with the sticker
     Magick::Image * stickerImage;

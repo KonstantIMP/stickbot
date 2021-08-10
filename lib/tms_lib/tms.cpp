@@ -26,16 +26,29 @@ void kimp::Sticker::fillBackground() {
 
 void kimp::Sticker::addAuthor(const std::string author, const std::string avatar) {
     addAvatar(avatar);
+    addNickname(author);
 }
 
 void kimp::Sticker::addAvatar(const std::string avatar) {
     Magick::Image * av = new Magick::Image(avatar);
     av->quality (Magick::NoCompression);
-    av->scale(Magick::Geometry(108, 108));
+    av->scale(Magick::Geometry(AVATAR_SIZE, AVATAR_SIZE));
 
     stickerImage->composite(*av, 25, 25);
 
     delete av;
+}
+
+void kimp::Sticker::addNickname (const std::string author) {
+    stickerImage->fontFamily("Roboto, Regular");
+    stickerImage->fontStyle(Magick::StyleType::BoldStyle);
+    stickerImage->fontPointsize(28);
+
+    if (stickerPreset == VIOLET) stickerImage->fillColor(Magick::Color("#ffffff"));
+    else if (stickerPreset == GREEN) stickerImage->fillColor(Magick::Color("#9400d3"));
+    else stickerImage->fillColor(Magick::Color("#ffffff")); 
+
+    stickerImage->annotate(author, Magick::Geometry (0, 0, AVATAR_SIZE + 25 + 20, 25));
 }
 
 void kimp::Sticker::save(std::string path)  {
