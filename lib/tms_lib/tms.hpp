@@ -47,6 +47,12 @@ public:
     void addAuthor (const std::string author, const std::string avatar);
 
     /**
+     * @brief Add qoute to the sticker
+     * @param[in] text Quote for adding
+     */
+    void addText (const std::string text);
+
+    /**
      * @brief Saves the sticker to the file
      * @param[in] path Path to the new file
      */
