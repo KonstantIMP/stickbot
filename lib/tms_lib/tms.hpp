@@ -3,7 +3,6 @@
 // Date: 9 Aug 2021
 #pragma once
 
-#include "Magick++/Include.h"
 #include <Magick++.h>
 
 #include <cstddef>

@@ -1,17 +1,13 @@
-#include "Magick++/Color.h"
-#include "Magick++/Drawable.h"
-#include "Magick++/Geometry.h"
-#include "Magick++/Image.h"
-#include "Magick++/Include.h"
-#include "MagickCore/composite.h"
-#include "MagickCore/geometry.h"
+// Functions and enumeration definition
+// Author: KonstantIMP <mihedovkos@gmail.com>
+// Date: 9 Aug 2021
 #include <Magick++.h>
 #include <algorithm>
 #include <cstddef>
 #include <memory>
 #include <string>
 
-#include <tms.hpp>
+#include "tms.hpp"
 
 kimp::Sticker::Sticker (const PresetColor preset)  : stickerPreset {preset}, trimSize{0} { 
     Magick::InitializeMagick(nullptr);
@@ -86,14 +82,4 @@ void kimp::Sticker::trim () {
 
 void kimp::Sticker::save(std::string path)  {
     stickerImage->write (path);
-}
-
-int main (int argc, char ** argv) {
-    kimp::Sticker * stick = new kimp::Sticker(kimp::GREEN);
-    stick->fillBackground();
-    stick->addAuthor("Карина", "/home/kimp/Downloads/wO8KF-aC2Cg.jpg");
-    stick->addText("Яблоко - это ананас!");
-    stick->trim();
-    stick->save("woof.png");
-    return 0;
 }
