@@ -6,13 +6,14 @@
 #include "MagickCore/composite.h"
 #include "MagickCore/geometry.h"
 #include <Magick++.h>
+#include <algorithm>
 #include <cstddef>
 #include <memory>
 #include <string>
 
 #include <tms.hpp>
 
-kimp::Sticker::Sticker (const PresetColor preset)  : stickerPreset {preset} { 
+kimp::Sticker::Sticker (const PresetColor preset)  : stickerPreset {preset}, trimSize{0} { 
     Magick::InitializeMagick(nullptr);
         
     stickerImage = std::unique_ptr<Magick::Image>(new Magick::Image (Magick::Geometry (STICKER_SIZE, STICKER_SIZE), Magick::Color ("transparent")));   
@@ -34,10 +35,12 @@ void kimp::Sticker::addText(const std::string text) {
 
     q->magick("png");
     q->fontFamily("Roboto, Regular");
-    //q->fontPointsize(22);
+    q->fontPointsize(22);
     q->fillColor(presets[stickerPreset].quoteColor);
     q->backgroundColor(Magick::Color("transparent"));
     q->read("CAPTION:" + text);
+
+    q->trim (); trimSize = q->size().height();
 
     stickerImage->composite(*q, Magick::Geometry(0, 0, PADDING_SIZE + AVATAR_SIZE + MARGIN_SIZE, PADDING_SIZE + MARGIN_SIZE * 2), Magick::OverCompositeOp);
 }
@@ -70,15 +73,27 @@ void kimp::Sticker::addNickname (const std::string author) {
     stickerImage->composite(*n, Magick::Geometry(0, 0, PADDING_SIZE + AVATAR_SIZE + MARGIN_SIZE, PADDING_SIZE), Magick::OverCompositeOp);
 }
 
+void kimp::Sticker::trim () {
+    std::size_t newHeight = std::max(AVATAR_SIZE + PADDING_SIZE * 2, PADDING_SIZE * 2 + MARGIN_SIZE * 2 + trimSize);
+
+    std::unique_ptr<Magick::Image> mask = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(STICKER_SIZE, STICKER_SIZE), Magick::Color("transparent")));
+    mask->fillColor(Magick::Color("black")); stickerImage->alpha(true);
+    mask->draw(Magick::DrawableRoundRectangle(0, 0, STICKER_SIZE, newHeight, 36, 36));
+
+    stickerImage->composite(*mask, 0, 0, MagickCore::DstInCompositeOp);
+    stickerImage->trim();
+}
+
 void kimp::Sticker::save(std::string path)  {
     stickerImage->write (path);
 }
 
 int main (int argc, char ** argv) {
-    kimp::Sticker * stick = new kimp::Sticker(kimp::VIOLET);
+    kimp::Sticker * stick = new kimp::Sticker(kimp::GREEN);
     stick->fillBackground();
-    stick->addAuthor("Tigr Baby", "/home/kimp/Downloads/photo_2021-07-31_00-22-35.jpg");
+    stick->addAuthor("Карина", "/home/kimp/Downloads/wO8KF-aC2Cg.jpg");
     stick->addText("Яблоко - это ананас!");
+    stick->trim();
     stick->save("woof.png");
     return 0;
 }

@@ -6,6 +6,7 @@
 #include "Magick++/Include.h"
 #include <Magick++.h>
 
+#include <cstddef>
 #include <memory>
 #include <map>
 
@@ -48,6 +49,11 @@ public:
     void addText (const std::string text);
 
     /**
+     * @brief Crop the sticker and round corners
+     */
+    void trim ();
+
+    /**
      * @brief Saves the sticker to the file
      * @param[in] path Path to the new file
      */
@@ -69,6 +75,8 @@ private:
     std::unique_ptr<Magick::Image> stickerImage;
     ///> Used color preset
     PresetColor stickerPreset;
+    ///> Value for smart sticker trim
+    std::size_t trimSize;
 
 private:
     /**
@@ -83,22 +91,22 @@ private:
     ///> Map with prebuilt color presets
     std::map<PresetColor, StickerPreset> presets = {
         {VIOLET, StickerPreset{"gradient:#0d324d-#7f5a83", "#ea8df7","white"}},
-        {GREEN, StickerPreset{"gradient:#20ded3-#f6fba2", "#f6fba2", "#ffff33"}},
+        {GREEN, StickerPreset{"gradient:#20ded3-#f6fba2", "#007B9D", "#4f4f4f"}},
         {BLUE, StickerPreset{"gradient:#b621fe-#1fd1f9", "#1fd1f9", "white"}},
         {WHITE, StickerPreset{"gradient:#fffcff-#d5fefd", "#6666ff", "#6495ed"}}
     };
 
     ///> Contains sticker`s size
-    const unsigned long STICKER_SIZE = 512;
+    const std::size_t STICKER_SIZE = 512;
 
     ///> Contain`s avatar size
-    const unsigned long AVATAR_SIZE  = 72;
+    const std::size_t AVATAR_SIZE  = 72;
 
     ///> Padding for the sticker`s borders
-    const unsigned long PADDING_SIZE = 25;
+    const std::size_t PADDING_SIZE = 25;
 
     ///> Margin between sticker`s elements
-    const unsigned long MARGIN_SIZE  = 20;
+    const std::size_t MARGIN_SIZE  = 20;
 };
 
 } // namespace kimp
