@@ -11,23 +11,11 @@
 
 namespace kimp {
 
-///> Contains sticker`s size
-const unsigned long STICKER_SIZE = 512;
-
-///> Contain`s avatar size
-const unsigned long AVATAR_SIZE  = 72;
-
-///> Padding for the sticker`s borders
-const unsigned long PADDING_SIZE = 25;
-
-///> Margin between sticker`s elements
-const unsigned long MARGIN_SIZE  = 20;
-
 /**
  * @brief Contains supported color presets for the sticker
  */
 enum PresetColor {
-    VIOLET, GREEN, GRAY
+    VIOLET, GREEN, BLUE, WHITE
 };
 
 /**
@@ -95,9 +83,22 @@ private:
     ///> Map with prebuilt color presets
     std::map<PresetColor, StickerPreset> presets = {
         {VIOLET, StickerPreset{"gradient:#0d324d-#7f5a83", "#ea8df7","white"}},
-        {GREEN, StickerPreset()},
-        {GRAY, StickerPreset()}
+        {GREEN, StickerPreset{"gradient:#20ded3-#f6fba2", "#f6fba2", "#ffff33"}},
+        {BLUE, StickerPreset{"gradient:#b621fe-#1fd1f9", "#1fd1f9", "white"}},
+        {WHITE, StickerPreset{"gradient:#fffcff-#d5fefd", "#6666ff", "#6495ed"}}
     };
+
+    ///> Contains sticker`s size
+    const unsigned long STICKER_SIZE = 512;
+
+    ///> Contain`s avatar size
+    const unsigned long AVATAR_SIZE  = 72;
+
+    ///> Padding for the sticker`s borders
+    const unsigned long PADDING_SIZE = 25;
+
+    ///> Margin between sticker`s elements
+    const unsigned long MARGIN_SIZE  = 20;
 };
 
 } // namespace kimp

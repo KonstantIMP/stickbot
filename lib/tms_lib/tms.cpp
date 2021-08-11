@@ -1,7 +1,11 @@
 #include "Magick++/Color.h"
+#include "Magick++/Drawable.h"
+#include "Magick++/Geometry.h"
 #include "Magick++/Image.h"
 #include "Magick++/Include.h"
+#include "MagickCore/composite.h"
 #include <Magick++.h>
+#include <cstddef>
 #include <string>
 
 #include <tms.hpp>
@@ -11,6 +15,7 @@ kimp::Sticker::Sticker (const PresetColor preset)  : stickerPreset {preset} {
         
     stickerImage = std::unique_ptr<Magick::Image>(new Magick::Image (Magick::Geometry (STICKER_SIZE, STICKER_SIZE), Magick::Color ("transparent")));   
     stickerImage->magick("png"); stickerImage->quality(Magick::NoCompression);
+    stickerImage->alpha(true);
 }
 
 void kimp::Sticker::fillBackground() {
@@ -37,10 +42,16 @@ void kimp::Sticker::addText(const std::string text) {
 
 void kimp::Sticker::addAvatar(const std::string avatar) {
     std::unique_ptr<Magick::Image> av = std::unique_ptr<Magick::Image>(new Magick::Image(avatar));
-    av->quality (Magick::NoCompression);
+    av->quality (Magick::NoCompression); av->alpha(true);
     av->scale(Magick::Geometry(AVATAR_SIZE, AVATAR_SIZE));
 
-    stickerImage->composite(*av, PADDING_SIZE, PADDING_SIZE);
+    std::unique_ptr<Magick::Image> mask = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(AVATAR_SIZE, AVATAR_SIZE), Magick::Color("transparent")));
+    mask->fillColor(Magick::Color("black"));
+    mask->draw(Magick::DrawableCircle(AVATAR_SIZE / 2.0, AVATAR_SIZE / 2.0, 0, AVATAR_SIZE / 2.0));
+
+    av->composite(*mask, 0, 0, MagickCore::DstInCompositeOp);
+
+    stickerImage->composite(*av, PADDING_SIZE, PADDING_SIZE, MagickCore::OverCompositeOp);
 }
 
 void kimp::Sticker::addNickname (const std::string author) {
@@ -55,7 +66,6 @@ void kimp::Sticker::addNickname (const std::string author) {
 
 void kimp::Sticker::save(std::string path)  {
     stickerImage->write (path);
-    
 }
 
 int main (int argc, char ** argv) {
