@@ -4,8 +4,10 @@
 #include "Magick++/Image.h"
 #include "Magick++/Include.h"
 #include "MagickCore/composite.h"
+#include "MagickCore/geometry.h"
 #include <Magick++.h>
 #include <cstddef>
+#include <memory>
 #include <string>
 
 #include <tms.hpp>
@@ -31,8 +33,8 @@ void kimp::Sticker::addText(const std::string text) {
     std::unique_ptr<Magick::Image> q = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(STICKER_SIZE - 50 - AVATAR_SIZE - 20, STICKER_SIZE - 50 - 28 - 12), Magick::Color("transparent")));
 
     q->magick("png");
-    q->fontFamily("Roboto");
-    q->fontPointsize(18);
+    q->fontFamily("Roboto, Regular");
+    //q->fontPointsize(22);
     q->fillColor(presets[stickerPreset].quoteColor);
     q->backgroundColor(Magick::Color("transparent"));
     q->read("CAPTION:" + text);
@@ -55,13 +57,17 @@ void kimp::Sticker::addAvatar(const std::string avatar) {
 }
 
 void kimp::Sticker::addNickname (const std::string author) {
-    stickerImage->fontFamily("Roboto, Regular");
-    stickerImage->fontStyle(Magick::StyleType::BoldStyle);
-    stickerImage->fontPointsize(28);
+    std::unique_ptr<Magick::Image> n = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(STICKER_SIZE - AVATAR_SIZE - 2 * PADDING_SIZE - MARGIN_SIZE, MARGIN_SIZE * 1.5), Magick::Color("transparent")));
 
-    stickerImage->fillColor(Magick::Color(presets[stickerPreset].nicknameColor));
+    n->magick("png");
+    n->fontFamily("Roboto, Regular");
+    n->fontPointsize(26);
+    n->fillColor(presets[stickerPreset].nicknameColor);
+    n->backgroundColor(Magick::Color("transparent"));
+    n->textGravity(MagickCore::WestGravity);
+    n->read("CAPTION:" + author);
 
-    stickerImage->annotate(author, Magick::Geometry (0, 0, AVATAR_SIZE + PADDING_SIZE + MARGIN_SIZE, PADDING_SIZE));
+    stickerImage->composite(*n, Magick::Geometry(0, 0, PADDING_SIZE + AVATAR_SIZE + MARGIN_SIZE, PADDING_SIZE), Magick::OverCompositeOp);
 }
 
 void kimp::Sticker::save(std::string path)  {
@@ -71,8 +77,8 @@ void kimp::Sticker::save(std::string path)  {
 int main (int argc, char ** argv) {
     kimp::Sticker * stick = new kimp::Sticker(kimp::VIOLET);
     stick->fillBackground();
-    stick->addAuthor("KonstantIMP", "/home/kimp/Projects/stickBot/logo10.png");
-    stick->addText("Когда-то, я подскользнулся на льду. Чтобы не упасть я выкрикрнул: \"Свинка Пеппа\". И это сработало!");
+    stick->addAuthor("Tigr Baby", "/home/kimp/Downloads/photo_2021-07-31_00-22-35.jpg");
+    stick->addText("Яблоко - это ананас!");
     stick->save("woof.png");
     return 0;
 }
