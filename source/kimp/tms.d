@@ -35,3 +35,29 @@ extern (C++, kimp) {
 
     }
 }
+
+/** 
+ * Converts PresetColor to the string
+ * Params:
+ *   p = Preset for convertion
+ * Returns: String with preset
+ */
+string presetToString (PresetColor p) {
+    if (p == PresetColor.WHITE) return "white";
+    if (p == PresetColor.VIOLET) return "violet";
+    if (p == PresetColor.GREEN) return "green";
+    return "blue";
+}
+
+/** 
+ * Converts string to the PresetColor
+ * Params:
+ *   s = String for convertion
+ * Returns: PresetColor
+ */
+PresetColor stringToPreset (string s) {
+    if (s == "white") return PresetColor.WHITE;
+    if (s == "violet") return PresetColor.VIOLET;
+    if (s == "green") return PresetColor.GREEN;
+    return PresetColor.BLUE;
+}

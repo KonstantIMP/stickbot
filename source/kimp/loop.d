@@ -7,7 +7,7 @@ module kimp.loop;
 
 import tg.bot, tg.type;
 
-import kimp.answer;
+import kimp.answer, kimp.tms : PresetColor, stringToPreset;
 
 import std.experimental.logger, core.thread, std.conv;
 import std.array : split;
@@ -81,6 +81,19 @@ private void handleMessage (ref TelegramBot bot, TelegramMessage message) {
     }
     else if (message.text != "") {
         if (["/start", "/help", "/q", "/qg", "/qw", "/qb", "/qv"].count (message.text.split(' ')[0])) processCommand (bot, message);
+        else {
+            if (message.replyToMessage !is null) {
+                if (message.text.length && message.replyToMessage.from.id == bot.bot.id) {
+                    auto msgTocken = message.replyToMessage.text.split(' ');
+                    log ("Found reply message. Checking...");
+                    if (msgTocken.length > 4) {
+                        if (["green", "blue", "white", "violet"].count(msgTocken[3])) {
+                            answer (bot, message, stringToPreset(msgTocken[3]));
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -99,6 +112,10 @@ private void processCommand (ref TelegramBot bot, TelegramMessage message) {
     else if (message.text.split(' ')[0] == "/help") {
         sendHelp (bot, message.chat.id);
     }
+    else {
+        if (message.replyToMessage is null) sendHelp (bot, message.chat.id);
+        else answerReply (bot, message);
+    }
 }
 
 /** 
@@ -113,4 +130,21 @@ private void handleCallback (ref TelegramBot bot, TelegramCallbackQuery callback
     if (callback.data == "/help") {
         sendHelp (bot, callback.message.chat.id);
     }
+    else if (callback.data == "/create") {
+        createStickerCallback (bot, callback.message.chat.id);
+    }
+    else if (callback.data == "/violet") {
+        createStickerCallback (bot, callback.message.chat.id, PresetColor.VIOLET);
+    }
+    else if (callback.data == "/blue") {
+        createStickerCallback (bot, callback.message.chat.id, PresetColor.BLUE);
+    }
+    else if (callback.data == "/green") {
+        createStickerCallback (bot, callback.message.chat.id, PresetColor.GREEN);
+    }
+    else if (callback.data == "/white") {
+        createStickerCallback (bot, callback.message.chat.id, PresetColor.WHITE);
+    }
+
+    bot.answerCallbackQuery(callback.id);
 }

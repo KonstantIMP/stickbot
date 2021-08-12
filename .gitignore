@@ -13,3 +13,4 @@ stickbot-test-*
 *.o
 *.obj
 *.lst
+*.tmp
