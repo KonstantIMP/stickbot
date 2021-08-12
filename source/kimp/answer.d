@@ -92,14 +92,14 @@ void answerReply (ref TelegramBot bot, TelegramMessage message) {
         write (avatar, bot.downloadFile(bot.getFile(photos.photos[0][$ - 1].fileId)));
     } else avatar = "";
 
-    PresetColor preset; string presetStr = message.text.split(' ')[0];
+    PresetColor preset; string presetStr = message.text.split(' ')[0].split('@')[0];
     if (presetStr == "/q" || presetStr == "/qv") preset = PresetColor.VIOLET;
     else if (presetStr == "/qb") preset = PresetColor.BLUE;
     else if (presetStr == "/qw") preset = PresetColor.WHITE;
     else preset = PresetColor.GREEN;
 
     string fullName = message.replyToMessage.from.firstName ~ " " ~ message.replyToMessage.from.lastName ~ '\0';
-    Sticker.createSticker (preset, fullName.ptr, (avatar ~ '\0').ptr, (message.text ~ '\0').ptr, (sticker ~ '\0').ptr);
+    Sticker.createSticker (preset, fullName.ptr, (avatar ~ '\0').ptr, (message.replyToMessage.text ~ '\0').ptr, (sticker ~ '\0').ptr);
     bot.sendSticker (message.chat.id, TelegramInputFile.createFromFile(sticker));
 }
 

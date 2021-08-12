@@ -64,6 +64,25 @@ private void botInit (ref TelegramBot bot) {
         warning ("The bot has webhook mode enabled! Disbaling...");
         bot.deleteWebhook (true);
     } else log ("The bot does not have enabled webhook mode");
+
+    log ("Resetting bot commands.");
+    
+    bot.deleteMyCommands ();
+    
+    TelegramBotCommandScopeDefault scopeDef = new TelegramBotCommandScopeDefault();
+    scopeDef.type = "default";
+
+    TelegramBotCommand [] commands; commands.length = 5;
+
+    for (ulong i = 0; i < 5; i++) commands[i] = new TelegramBotCommand();
+
+    commands[0].command = "/q"; commands[0].description = "Creates new violet sticker";
+    commands[1].command = "/qv"; commands[1].description = "Creates new violet sticker";
+    commands[2].command = "/qg"; commands[2].description = "Creates new green sticker";
+    commands[3].command = "/qw"; commands[3].description = "Creates new white sticker";
+    commands[4].command = "/qb"; commands[4].description = "Creates new blue sticker";
+
+    bot.setMyCommands (commands, new TelegramVariant (scopeDef.getAsJson()));
 }
 
 /** 
@@ -80,7 +99,7 @@ private void handleMessage (ref TelegramBot bot, TelegramMessage message) {
         answerForward (bot, message);
     }
     else if (message.text != "") {
-        if (["/start", "/help", "/q", "/qg", "/qw", "/qb", "/qv"].count (message.text.split(' ')[0])) processCommand (bot, message);
+        if (["/start", "/help", "/q", "/qg", "/qw", "/qb", "/qv"].count (message.text.split(' ')[0].split('@')[0])) processCommand (bot, message);
         else {
             if (message.replyToMessage !is null) {
                 if (message.text.length && message.replyToMessage.from.id == bot.bot.id) {
