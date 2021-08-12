@@ -6,6 +6,7 @@
 module kimp.answer;
 
 import tg.bot, tg.type, tg.core.format;
+import kimp.storage, std.file, kimp.tms;
 
 /** 
  * Sends hello message to the user
@@ -53,6 +54,27 @@ void sendHelp (T) (ref TelegramBot bot, T id) if (is (T == ulong) || is (T == st
         "\n";
 
         bot.sendMessage (id, helpMessage);
+}
+
+/** 
+ * Creates sticker from forwarded message
+ * Params:
+ *   bot = Bot for sending sticker
+ *   message = Forwarded message
+ *   preset = Color preset for the stick
+ */
+void answerForward (ref TelegramBot bot, TelegramMessage message, PresetColor preset = PresetColor.VIOLET) {
+    string avatar = TmpStorage.genTmpFile ();
+    string sticker = TmpStorage.genTmpFile ();
+
+    auto photos = bot.getUserProfilePhotos(message.forwardFrom.id);
+    if (photos.totalCount) {
+        write (avatar, bot.downloadFile(bot.getFile(photos.photos[0][0].fileId)));
+    } else avatar = "";
+
+    string fullName = message.forwardFrom.firstName ~ " " ~ message.forwardFrom.lastName ~ '\0';
+    Sticker.createSticker (preset, fullName.ptr, (avatar ~ '\0').ptr, (message.text ~ '\0').ptr, (sticker ~ '\0').ptr);
+    bot.sendSticker (message.chat.id, TelegramInputFile.createFromFile(sticker));
 }
 
 /** 

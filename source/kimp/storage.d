@@ -20,7 +20,7 @@ class TmpStorage {
 
         string fileName = randomUUID().toString() ~ ".tmp";
 
-        while (exsist (tmpDir ~ pathSeparator ~ fileName)) {
+        while (exists (tmpDir ~ pathSeparator ~ fileName)) {
             fileName = randomUUID().toString() ~ ".tmp";
         }
 

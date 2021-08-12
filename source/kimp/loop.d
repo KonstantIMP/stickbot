@@ -75,10 +75,9 @@ private void botInit (ref TelegramBot bot) {
 private void handleMessage (ref TelegramBot bot, TelegramMessage message) {
     log ("Recieved TelegramMessage : " ~ to!string(message.messageId));
 
-    if (message.text == "") {
-        if (message.forwardFrom !is null) {
-            log ("Found forwarded message. Process...");
-        }
+    if (message.forwardFrom !is null && message.chat.type == "private") {
+        log ("Found forwarded message. Process...");
+        answerForward (bot, message);
     }
     else {
         if (["/start", "/help", "/q", "/qg", "/qw", "/qb", "/qv"].count (message.text.split(' ')[0])) processCommand (bot, message);
