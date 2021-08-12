@@ -9,6 +9,15 @@
 
 #include "tms.hpp"
 
+void kimp::Sticker::createSticker (kimp::PresetColor preset, const char * author, const char * avatar, const char * text, const char * save) {
+    std::unique_ptr<kimp::Sticker> stick = std::unique_ptr<kimp::Sticker>(new kimp::Sticker(preset));
+    stick->fillBackground();
+    stick->addAuthor (author, avatar);
+    stick->addText (text);
+    stick->trim ();
+    stick->save (save);
+}
+
 kimp::Sticker::Sticker (const PresetColor preset)  : stickerPreset {preset}, trimSize{0} { 
     Magick::InitializeMagick(nullptr);
         

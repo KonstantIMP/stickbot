@@ -8,6 +8,7 @@
 #include <cstddef>
 #include <memory>
 #include <map>
+#include <string>
 
 namespace kimp {
 
@@ -23,6 +24,16 @@ enum PresetColor {
  */
 class Sticker {
 public:
+    /**
+     * @brief Static method for importing to the D
+     * @param[in] preset Sticker`s color preset
+     * @param[in] author C-style string with author
+     * @param[in] avatar C-style string with path to the avatar
+     * @param[in] text C-style string with quote
+     * @param[in] save Path for saving the stick
+     */
+    static void createSticker (PresetColor preset, const char * author, const char * avatar, const char * text, const char * save);
+
     /**
      * Init the sticker object and complete Magick init
      * @param [in] preset Color preset for the sticker

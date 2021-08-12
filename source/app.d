@@ -1,10 +1,8 @@
-import tg.bot, tg.type, std.file;
+//import tg.bot, tg.type, std.file;
+
+import kimp.tms;
 
 int main (string [] args) {
-    TelegramBot bot = new TelegramBot (args[1]);
-
-    TelegramUpdate [] updates = bot.getUpdates ();
     
-
     return 0;
 }

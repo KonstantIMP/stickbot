@@ -6,7 +6,8 @@ stickbot_desp = [
 ]
 
 stickbot_source = [
-    'app.d'
+    'app.d',
+    'kimp/tms.d'
 ]
 
 stickbot = executable ('stickbot',
