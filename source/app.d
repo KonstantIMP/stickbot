@@ -1,8 +1,12 @@
-//import tg.bot, tg.type, std.file;
-
-import kimp.tms;
+import tg.bot, std.stdio, kimp.loop;
 
 int main (string [] args) {
-    
-    return 0;
+    if (args.length != 2) {
+        stderr.writeln ("[ERROR] Incorrect input data.");
+        stderr.writeln ("[ERROR] [USAGE] stickbot <bot_api>");
+        return -1;
+    }
+
+    TelegramBot stickbot = new TelegramBot(args[1]);
+    return botLoop(stickbot);
 }
