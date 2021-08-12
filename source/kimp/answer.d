@@ -69,7 +69,7 @@ void answerForward (ref TelegramBot bot, TelegramMessage message, PresetColor pr
 
     auto photos = bot.getUserProfilePhotos(message.forwardFrom.id);
     if (photos.totalCount) {
-        write (avatar, bot.downloadFile(bot.getFile(photos.photos[0][0].fileId)));
+        write (avatar, bot.downloadFile(bot.getFile(photos.photos[0][$ - 1].fileId)));
     } else avatar = "";
 
     string fullName = message.forwardFrom.firstName ~ " " ~ message.forwardFrom.lastName ~ '\0';

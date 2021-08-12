@@ -31,7 +31,7 @@ void kimp::Sticker::fillBackground() {
 }
 
 void kimp::Sticker::addAuthor(const std::string author, const std::string avatar) {
-    addAvatar(avatar);
+    if (avatar != "") addAvatar(avatar);
     addNickname(author);
 }
 

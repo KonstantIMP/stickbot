@@ -34,12 +34,12 @@ public int botLoop (ref TelegramBot bot) {
             auto updates = bot.getUpdates (updateOffset);
 
             foreach (u; updates) {
+                log ("Handled update : " ~ to!string(u.updateId));
+                updateOffset = u.updateId + 1;
+
                 if (u.message !is null) handleMessage (bot, u.message);
                 else if (u.callbackQuery !is null) handleCallback (bot, u.callbackQuery);
                 else log ("Resieved an unsupported method update. Skipping...");
-
-                log ("Handled update : " ~ to!string(u.updateId));
-                updateOffset = u.updateId + 1;
             }
         } catch (Exception e) {
             error ("Bot error : " ~ e.msg);
@@ -79,7 +79,7 @@ private void handleMessage (ref TelegramBot bot, TelegramMessage message) {
         log ("Found forwarded message. Process...");
         answerForward (bot, message);
     }
-    else {
+    else if (message.text != "") {
         if (["/start", "/help", "/q", "/qg", "/qw", "/qb", "/qv"].count (message.text.split(' ')[0])) processCommand (bot, message);
     }
 }
