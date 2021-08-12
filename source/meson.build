@@ -9,7 +9,8 @@ stickbot_source = [
     'app.d',
     'kimp/tms.d',
     'kimp/loop.d',
-    'kimp/answer.d'
+    'kimp/answer.d',
+    'kimp/storage.d'
 ]
 
 stickbot = executable ('stickbot',
