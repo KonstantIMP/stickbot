@@ -8,5 +8,5 @@ int main (string [] args) {
     }
 
     TelegramBot stickbot = new TelegramBot(args[1]);
-    return botLoop(stickbot);
+    return 0;//botLoop(stickbot);
 }

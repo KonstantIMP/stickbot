@@ -76,10 +76,12 @@ private void handleMessage (ref TelegramBot bot, TelegramMessage message) {
     log ("Recieved TelegramMessage : " ~ to!string(message.messageId));
 
     if (message.text == "") {
-        log ("Recieved message without text. Skiping...");
+        if (message.forwardFrom !is null) {
+            log ("Found forwarded message. Process...");
+        }
     }
     else {
-        if (["/start", "/q", "/qg", "/qw", "/qb", "/qv"].count (message.text.split(' ')[0])) processCommand (bot, message);
+        if (["/start", "/help", "/q", "/qg", "/qw", "/qb", "/qv"].count (message.text.split(' ')[0])) processCommand (bot, message);
     }
 }
 
@@ -93,9 +95,10 @@ private void processCommand (ref TelegramBot bot, TelegramMessage message) {
     log ("Found command. Processing...");
 
     if (message.text.split(' ')[0] == "/start") {
-        if (message.from !is null) sendStart (bot, message.from.id);
-        else if (message.senderChat !is null) sendStart (bot, message.senderChat.id);
-        else error ("Unsupported sender type. Skiping...");
+        sendStart (bot, message.chat.id);
+    }
+    else if (message.text.split(' ')[0] == "/help") {
+        sendHelp (bot, message.chat.id);
     }
 }
 
@@ -107,4 +110,8 @@ private void processCommand (ref TelegramBot bot, TelegramMessage message) {
  */
 private void handleCallback (ref TelegramBot bot, TelegramCallbackQuery callback) {
     log ("Recieved TelegramCallbackQuery : " ~ to!string(callback.id));
+
+    if (callback.data == "/help") {
+        sendHelp (bot, callback.message.chat.id);
+    }
 }

@@ -24,6 +24,36 @@ void sendStart (T) (ref TelegramBot bot, T id) if (is (T == ulong) || is (T == s
     bot.sendMessage (id, helloMessage, TextFormat.None, null, true, false, 0, true, generateKeyboard());
 }
 
+/** 
+ * Sends hellp message to the user
+ * Params:
+ *   bot = Bot for sending
+ *   id = User for sending
+ */
+void sendHelp (T) (ref TelegramBot bot, T id) if (is (T == ulong) || is (T == string)) {
+    string helpMessage = "" ~
+        "Small user manual!\n" ~
+        "\n" ~
+        "How to create the sticker? There are some ways to do that.\n" ~
+        "\n" ~
+        "Using this chat : \n" ~
+        "1. Forward message with the quote here and I will create the sticker\n" ~
+        "2. Use \"🦄 Create\" button\n" ~
+        "3. Send me a command (read more later)\n" ~
+        "\n" ~
+        "In group chat\n" ~
+        "1. Send a command (read more later)\n" ~
+        "\n" ~
+        "Supported commands :\n" ~
+        "/q [Username] [Quote] - creates random sticker\n" ~
+        "/qg [Username] [Quote] - creates green sticker\n" ~
+        "/qw [Username] [Quote] - creates white sticker\n" ~
+        "/qb [Username] [Quote] - creates blue sticker\n" ~
+        "/qv [Username] [Quote] - creates violet sticker\n" ~
+        "\n";
+
+        bot.sendMessage (id, helpMessage);
+}
 
 /** 
  * Generate default inline keyboard for the stickbot
