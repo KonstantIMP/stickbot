@@ -54,7 +54,7 @@ void sendHelp (T) (ref TelegramBot bot, T id) if (is (T == ulong) || is (T == st
         "/qv - creates violet sticker\n" ~
         "\n";
 
-        bot.sendMessage (id, helpMessage, TextFormat.None, null, true, false, 0, true, generateKeyboard());
+    bot.sendMessage (id, helpMessage, TextFormat.None, null, true, false, 0, true, generateKeyboard());
 }
 
 /** 
@@ -75,6 +75,8 @@ void answerForward (ref TelegramBot bot, TelegramMessage message) {
     string fullName = message.forwardFrom.firstName ~ " " ~ message.forwardFrom.lastName ~ '\0';
     Sticker.createSticker (PresetColor.VIOLET, fullName.ptr, (avatar ~ '\0').ptr, (message.text ~ '\0').ptr, (sticker ~ '\0').ptr);
     bot.sendSticker (message.chat.id, TelegramInputFile.createFromFile(sticker));
+
+    if (avatar.length) { remove(avatar); } remove(sticker);
 }
 
 /** 
@@ -101,6 +103,8 @@ void answerReply (ref TelegramBot bot, TelegramMessage message) {
     string fullName = message.replyToMessage.from.firstName ~ " " ~ message.replyToMessage.from.lastName ~ '\0';
     Sticker.createSticker (preset, fullName.ptr, (avatar ~ '\0').ptr, (message.replyToMessage.text ~ '\0').ptr, (sticker ~ '\0').ptr);
     bot.sendSticker (message.chat.id, TelegramInputFile.createFromFile(sticker));
+
+    if (avatar.length) { remove(avatar); } remove(sticker);
 }
 
 /** 
@@ -122,6 +126,8 @@ void answer (ref TelegramBot bot, TelegramMessage message, PresetColor preset) {
     string fullName = message.from.firstName ~ " " ~ message.from.lastName ~ '\0';
     Sticker.createSticker (preset, fullName.ptr, (avatar ~ '\0').ptr, (message.text ~ '\0').ptr, (sticker ~ '\0').ptr);
     bot.sendSticker (message.chat.id, TelegramInputFile.createFromFile(sticker));
+
+    if (avatar.length) { remove(avatar); } remove(sticker);
 }
 
 /** 
