@@ -2,6 +2,7 @@ stickbot_desp = [
     dependency ('requests', method: 'dub'),
     dependency ('cachetools', method: 'dub'),
     dependency ('tg_d', method: 'dub'),
+    dependency ('di', method: 'dub'),
     libtms_dep
 ]
 
