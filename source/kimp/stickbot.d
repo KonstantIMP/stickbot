@@ -7,7 +7,7 @@ module kimp.stickbot;
 
 import tg.bot, tg.type;
 
-import std.experimental.logger;
+import kimp.log;
 
 /** 
  * Class for the StickBot managing
@@ -18,7 +18,11 @@ class StickBot : TelegramBot {
      * Params:
      *   tocken = Access tocken for the bot
      */
-    public this (string tocken) { super(tocken);
-    
+    public this (string tocken) { 
+        super(tocken); logger = new StickBotLogger();
+        logger.log ("StickBot started : ", this.bot().firstName(), " (@", this.bot().username(), ')');
     }
+
+    /** Local logger object */
+    private StickBotLogger logger;
 }

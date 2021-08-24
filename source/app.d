@@ -1,4 +1,4 @@
-import tg.bot, std.stdio, kimp.stickbot, kimp.log, std.experimental.logger;
+import tg.bot, std.stdio, kimp.stickbot;
 
 void main (string [] args) {
     if (args.length != 2) {
@@ -6,8 +6,6 @@ void main (string [] args) {
         stderr.writeln ("[ERROR] [USAGE] stickbot <bot_api>");
         return;
     } else {
-        sharedLog = new StickBotLogger();
-
         StickBot stick = new StickBot(args[1]);
     }
 }
