@@ -7,5 +7,6 @@ void main (string [] args) {
         return;
     } else {
         StickBot stick = new StickBot(args[1]);
+        stick.loop ();
     }
 }
