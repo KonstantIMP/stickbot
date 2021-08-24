@@ -123,16 +123,16 @@ private void handleMessage (ref TelegramBot bot, TelegramMessage message) {
  *   message = Recieved message with the command
  */
 private void processCommand (ref TelegramBot bot, TelegramMessage message) {
-    log ("Found command. Processing...");
+    log ("Found command. Processing... " ~ message.text);
 
     if (message.text.split(' ')[0] == "/start") {
-        sendStart (bot, message.chat.id);
+        sendStart (bot, message.chat.id, message.from.languageCode);
     }
     else if (message.text.split(' ')[0] == "/help") {
-        sendHelp (bot, message.chat.id);
+        sendHelp (bot, message.chat.id, message.from.languageCode);
     }
     else {
-        if (message.replyToMessage is null) sendHelp (bot, message.chat.id);
+        if (message.replyToMessage is null) sendHelp (bot, message.chat.id, message.from.languageCode);
         else answerReply (bot, message);
     }
 }
@@ -147,7 +147,7 @@ private void handleCallback (ref TelegramBot bot, TelegramCallbackQuery callback
     log ("Recieved TelegramCallbackQuery : " ~ to!string(callback.id));
 
     if (callback.data == "/help") {
-        sendHelp (bot, callback.message.chat.id);
+        sendHelp (bot, callback.message.chat.id, callback.from.languageCode);
     }
     else if (callback.data == "/create") {
         createStickerCallback (bot, callback.message.chat.id);

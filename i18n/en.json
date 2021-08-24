@@ -1,0 +1,25 @@
+{
+    "name" : "en",
+    "tr" : [
+        {
+            "id" : "hello_msg",
+            "tr" : "Welcome to the StickBot!\n\nThis bot can create beautiful stickers from your messages. You can send text to me or add me to the group chat. I will create sticker from forwarded messages.\n\nLet`s go!\n"
+        },
+        {
+            "id" : "create_btn",
+            "tr" : "🦄 Create"
+        },
+        {
+            "id" : "help_btn",
+            "tr" : "🍏 Help"
+        },
+        {
+            "id" : "donate_btn",
+            "tr" : "🐈 Donate"
+        },
+        {
+            "id" : "help_msg",
+            "tr" : "Small user manual!\n\nHow to create the sticker? There are some ways to do that.\n\nUsing this chat : \n1. Forward message with the quote here and I will create the sticker\n2. Use \"🦄 Create\" button\n3. Send a command as a reply to the message with needed text (read more later)\n\nIn group chat\n1. Send a command as a reply to the message with needed text (read more later)\n\nSupported commands :/q - creates random sticker\n/qg - creates green sticker\n/qw - creates white sticker\n/qb - creates blue sticker\n/qv - creates violet sticker\n"
+        }
+    ]
+}

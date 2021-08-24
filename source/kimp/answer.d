@@ -9,22 +9,19 @@ import tg.bot, tg.type, tg.core.format;
 import kimp.storage, std.file, kimp.tms;
 import std.array : split;
 
+import di.i18n;
+
 /** 
  * Sends hello message to the user
  * Params:
  *   bot = Bot for sending
  *   id = User for sending
+ *   languageCode = Lang for tranlsation
  */
-void sendStart (T) (ref TelegramBot bot, T id) if (is (T == ulong) || is (T == string)) {
-    string helloMessage = "" ~
-        "Welcome to the StickBot!\n" ~
-        "\n" ~ 
-        "This bot can create beautiful stickers from your messages." ~
-        " You can send text to me or add me to the group chat. I will create sticker from forwarded messages.\n" ~
-        "\n" ~
-        "Let`s go!\n";
+void sendStart (T) (ref TelegramBot bot, T id, string languageCode) if (is (T == ulong) || is (T == string)) {
+    string helloMessage = _f("hello_msg", _("hello_msg"), languageCode);
 
-    bot.sendMessage (id, helloMessage, TextFormat.None, null, true, false, 0, true, generateKeyboard());
+    bot.sendMessage (id, helloMessage, TextFormat.None, null, true, false, 0, true, generateKeyboard(languageCode));
 }
 
 /** 
@@ -32,29 +29,12 @@ void sendStart (T) (ref TelegramBot bot, T id) if (is (T == ulong) || is (T == s
  * Params:
  *   bot = Bot for sending
  *   id = User for sending
+ *   languageCode = Lang for tranlsation
  */
-void sendHelp (T) (ref TelegramBot bot, T id) if (is (T == ulong) || is (T == string)) {
-    string helpMessage = "" ~
-        "Small user manual!\n" ~
-        "\n" ~
-        "How to create the sticker? There are some ways to do that.\n" ~
-        "\n" ~
-        "Using this chat : \n" ~
-        "1. Forward message with the quote here and I will create the sticker\n" ~
-        "2. Use \"🦄 Create\" button\n" ~
-        "\n" ~
-        "In group chat\n" ~
-        "1. Send a command as a reply to the message with needed text (read more later)\n" ~
-        "\n" ~
-        "Supported commands :\n" ~
-        "/q - creates random sticker\n" ~
-        "/qg - creates green sticker\n" ~
-        "/qw - creates white sticker\n" ~
-        "/qb - creates blue sticker\n" ~
-        "/qv - creates violet sticker\n" ~
-        "\n";
+void sendHelp (T) (ref TelegramBot bot, T id, string languageCode) if (is (T == ulong) || is (T == string)) {
+    string helpMessage = _f("help_msg", _("help_msg"), languageCode);
 
-    bot.sendMessage (id, helpMessage, TextFormat.None, null, true, false, 0, true, generateKeyboard());
+    bot.sendMessage (id, helpMessage, TextFormat.None, null, true, false, 0, true, generateKeyboard(languageCode));
 }
 
 /** 
@@ -164,21 +144,23 @@ void createStickerCallback (T) (ref TelegramBot bot, T id, PresetColor preset) i
 
 /** 
  * Generate default inline keyboard for the stickbot
+ * Params:
+ *   languageCode = Language for translation
  * Returns: Generated keyboard
  */
-private TelegramInlineKeyboardMarkup generateKeyboard () {
+private TelegramInlineKeyboardMarkup generateKeyboard (string languageCode) {
     TelegramInlineKeyboardMarkup keyboard = new TelegramInlineKeyboardMarkup ();
 
     auto arr = keyboard.inlineKeyboard;
 
     TelegramInlineKeyboardButton createBtn = new TelegramInlineKeyboardButton ();
-    createBtn.text = "🦄 Create"; createBtn.callbackData = "/create";
+    createBtn.text = _f("create_btn", _("create_btn"), languageCode); createBtn.callbackData = "/create";
 
     TelegramInlineKeyboardButton helpBtn = new TelegramInlineKeyboardButton();
-    helpBtn.text = "🍏 Help"; helpBtn.callbackData = "/help";
+    helpBtn.text = _f("help_btn", _("help_btn"), languageCode); helpBtn.callbackData = "/help";
 
     TelegramInlineKeyboardButton donateBtn = new TelegramInlineKeyboardButton();
-    donateBtn.text = "🐈 Donate"; donateBtn.url = "https://sobe.ru/na/coffee_and_learning";
+    donateBtn.text = _f("donate_btn", _("donate_btn"), languageCode); donateBtn.url = "https://sobe.ru/na/coffee_and_learning";
 
     arr.length = 1;
     arr[0].length = 3;
