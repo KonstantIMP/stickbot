@@ -1,12 +1,13 @@
-import tg.bot, std.stdio, kimp.loop;
+import tg.bot, std.stdio, kimp.stickbot, kimp.log, std.experimental.logger;
 
-int main (string [] args) {
+void main (string [] args) {
     if (args.length != 2) {
         stderr.writeln ("[ERROR] Incorrect input data.");
         stderr.writeln ("[ERROR] [USAGE] stickbot <bot_api>");
-        return -1;
-    }
+        return;
+    } else {
+        sharedLog = new StickBotLogger();
 
-    TelegramBot stickbot = new TelegramBot(args[1]);
-    return botLoop(stickbot);
+        StickBot stick = new StickBot(args[1]);
+    }
 }

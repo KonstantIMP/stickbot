@@ -9,7 +9,8 @@ stickbot_desp = [
 stickbot_source = [
     'app.d',
     'kimp/tms.d',
-    'kimp/loop.d',
+    'kimp/stickbot.d',
+    'kimp/log.d',
     'kimp/answer.d',
     'kimp/storage.d'
 ]
