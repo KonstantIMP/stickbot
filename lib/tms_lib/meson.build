@@ -5,11 +5,13 @@ libtms_deps = [
 ]
 
 libtms_source = [
-    'tms.cpp'
+    'tms.cpp',
+    'split.cpp'
 ]
 
 libtms_headers = [
-    'tms.hpp'
+    'tms.hpp',
+    'split.hpp'
 ]
 
 libtms_lib = shared_library ('libtms-' + libtms_version,
