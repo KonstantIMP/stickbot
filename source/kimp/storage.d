@@ -26,4 +26,13 @@ class TmpStorage {
 
         return fileName;
     }
+
+    /** 
+     * Delete used tmp file
+     * Params:
+     *   path = Path to the file
+     */
+    static public void removeTmpFile (string path) {
+        remove (path);
+    }
 }
