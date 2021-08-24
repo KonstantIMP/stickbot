@@ -76,6 +76,12 @@ private:
     void addAvatar (const std::string avatar);
 
     /**
+     * @brief Generate avatar if it does not exsist
+     * @param[in] author Authors name
+     */
+    void genAvatar (const std::string author);
+
+    /**
      * @brief Draws author`s nickname
      * @param[in] author Nickname for display
      */
@@ -96,14 +102,16 @@ private:
         std::string backgroundGradient = ""; ///> String with command for generating background gradient
         std::string nicknameColor      = ""; ///> String with color for nickname
         std::string quoteColor         = ""; ///> String with color for the quite
+        std::string avatarGradient     = ""; ///> String with gradiend for avatar generation
+        std::string avatarColor        = ""; ///> String with the color for avatar generation
     };
 
     ///> Map with prebuilt color presets
     std::map<PresetColor, StickerPreset> presets = {
-        {VIOLET, StickerPreset{"gradient:#0d324d-#7f5a83", "#ea8df7","white"}},
-        {GREEN, StickerPreset{"gradient:#20ded3-#f6fba2", "#007B9D", "#4f4f4f"}},
-        {BLUE, StickerPreset{"gradient:#b621fe-#1fd1f9", "#1fd1f9", "white"}},
-        {WHITE, StickerPreset{"gradient:#fffcff-#d5fefd", "#6666ff", "#6495ed"}}
+        {VIOLET, StickerPreset{"gradient:#0d324d-#7f5a83", "#ea8df7","white", "gradient:#5f0a87-#a4508b", "white"}},
+        {GREEN, StickerPreset{"gradient:#20ded3-#f6fba2", "#007B9D", "#4f4f4f", ""}},
+        {BLUE, StickerPreset{"gradient:#b621fe-#1fd1f9", "#1fd1f9", "white", ""}},
+        {WHITE, StickerPreset{"gradient:#fffcff-#d5fefd", "#6666ff", "#6495ed", ""}}
     };
 
     ///> Contains sticker`s size
