@@ -72,8 +72,9 @@ class StickBot : TelegramBot {
      *   to = Chat to send
      *   author = Author of the quote
      *   text = The quote
+     *   preset = Color preset for the stick
      */
-    private void createSticker (TelegramChat to, TelegramUser author, string text) {
+    private void createSticker (TelegramChat to, TelegramUser author, string text, PresetColor preset = PresetColor.VIOLET) {
         import std.file : write;
 
         string avatar = TmpStorage.genTmpFile (), sticker = TmpStorage.genTmpFile ();
@@ -83,7 +84,7 @@ class StickBot : TelegramBot {
         else avatar = "";
 
         string fullName = author.firstName ~ " " ~ author.lastName ~ '\0';
-        Sticker.createSticker (PresetColor.VIOLET, fullName.ptr, (avatar ~ '\0').ptr, (text ~ '\0').ptr, (sticker ~ '\0').ptr);
+        Sticker.createSticker (preset, fullName.ptr, (avatar ~ '\0').ptr, (text ~ '\0').ptr, (sticker ~ '\0').ptr);
         this.sendSticker (to.id, TelegramInputFile.createFromFile(sticker));
 
         if (avatar.length) { TmpStorage.removeTmpFile (avatar); } TmpStorage.removeTmpFile (sticker);
