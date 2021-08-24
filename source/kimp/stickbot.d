@@ -5,7 +5,7 @@
  */
 module kimp.stickbot;
 
-import tg.bot, tg.type, kimp.log;
+import tg.bot, tg.type, kimp.log, kimp.storage, kimp.tms;
 import std.exception, std.signals;
 
 /** 
@@ -50,6 +50,43 @@ class StickBot : TelegramBot {
      */
     private void messageRecieved (TelegramBot bot, TelegramMessage msg) {
         logger.log ("Message recieved: ", msg.messageId);
+
+        if (msg.forwardFrom !is null) processForwardedMessage (msg);
+    }
+
+    /** 
+     * Process forwarded message
+     * Params:
+     *   msg = Msg for processing
+     */
+    private void processForwardedMessage (TelegramMessage msg) {
+        logger.log (msg.messageId, " : forwarded message. Process...");
+
+        if (msg.text.length == 0) logger.warning (msg.messageId, " : empty message. Skip...");
+        else createSticker (msg.chat, msg.forwardFrom, msg.text);
+    }
+
+    /** 
+     * Creates and send the sticker
+     * Params:
+     *   to = Chat to send
+     *   author = Author of the quote
+     *   text = The quote
+     */
+    private void createSticker (TelegramChat to, TelegramUser author, string text) {
+        import std.file : write;
+
+        string avatar = TmpStorage.genTmpFile (), sticker = TmpStorage.genTmpFile ();
+
+        auto photos = this.getUserProfilePhotos(author.id);
+        if (photos.totalCount) write (avatar, this.downloadFile(this.getFile(photos.photos[0][$ - 1].fileId)));
+        else avatar = "";
+
+        string fullName = author.firstName ~ " " ~ author.lastName ~ '\0';
+        Sticker.createSticker (PresetColor.VIOLET, fullName.ptr, (avatar ~ '\0').ptr, (text ~ '\0').ptr, (sticker ~ '\0').ptr);
+        this.sendSticker (to.id, TelegramInputFile.createFromFile(sticker));
+
+        if (avatar.length) { TmpStorage.removeTmpFile (avatar); } TmpStorage.removeTmpFile (sticker);
     }
 
     /** 
