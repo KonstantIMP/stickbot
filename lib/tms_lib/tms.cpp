@@ -3,11 +3,15 @@
 // Date: 9 Aug 2021
 #include <Magick++.h>
 #include <algorithm>
+#include <cctype>
 #include <cstddef>
 #include <memory>
 #include <string>
 
+#include "MagickCore/composite.h"
+#include "MagickCore/geometry.h"
 #include "tms.hpp"
+#include "split.hpp"
 
 void kimp::Sticker::createSticker (kimp::PresetColor preset, const char * author, const char * avatar, const char * text, const char * save) {
     std::unique_ptr<kimp::Sticker> stick = std::unique_ptr<kimp::Sticker>(new kimp::Sticker(preset));
@@ -32,6 +36,7 @@ void kimp::Sticker::fillBackground() {
 
 void kimp::Sticker::addAuthor(const std::string author, const std::string avatar) {
     if (avatar != "") addAvatar(avatar);
+    else genAvatar(author);
     addNickname(author);
 }
 
@@ -60,6 +65,34 @@ void kimp::Sticker::addAvatar(const std::string avatar) {
     mask->draw(Magick::DrawableCircle(AVATAR_SIZE / 2.0, AVATAR_SIZE / 2.0, 0, AVATAR_SIZE / 2.0));
 
     av->composite(*mask, 0, 0, MagickCore::DstInCompositeOp);
+
+    stickerImage->composite(*av, PADDING_SIZE, PADDING_SIZE, MagickCore::OverCompositeOp);
+}
+
+void kimp::Sticker::genAvatar (const std::string author) {
+    std::unique_ptr<Magick::Image> av = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(AVATAR_SIZE, AVATAR_SIZE), Magick::Color("transparent")));
+    av->quality (Magick::NoCompression); av->read(presets[stickerPreset].avatarGradient); av->alpha(true);
+
+    std::unique_ptr<Magick::Image> avt = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(AVATAR_SIZE, AVATAR_SIZE), Magick::Color("transparent")));
+
+    std::string initials = "";
+    for (auto i : split(author, ' ')) {
+        if (i.at(0) >= 0x20 && i.at(0) <= 0x7e) initials += i.substr(0, 1);
+        else if (i.length() > 2) initials += i.substr(0, 2);
+    }
+
+    avt->fontFamily("Roboto, Regular"); avt->fontPointsize(26);
+    avt->fillColor(presets[stickerPreset].avatarColor);
+    avt->backgroundColor(Magick::Color("transparent"));
+    avt->textGravity(MagickCore::CenterGravity);
+    avt->read ("CAPTION:" + initials);
+
+    std::unique_ptr<Magick::Image> mask = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(AVATAR_SIZE, AVATAR_SIZE), Magick::Color("transparent")));
+    mask->fillColor(Magick::Color("black"));
+    mask->draw(Magick::DrawableCircle(AVATAR_SIZE / 2.0, AVATAR_SIZE / 2.0, 0, AVATAR_SIZE / 2.0));
+
+    av->composite(*mask, 0, 0, MagickCore::DstInCompositeOp);
+    av->composite(*avt, 0, 0, MagickCore::OverCompositeOp);
 
     stickerImage->composite(*av, PADDING_SIZE, PADDING_SIZE, MagickCore::OverCompositeOp);
 }
