@@ -5,8 +5,8 @@
  */
 module kimp.stickbot;
 
-import tg.bot, tg.type, kimp.log, kimp.storage, kimp.tms;
-import std.exception, std.signals;
+import tg.bot, tg.type, di.i18n, kimp.log, kimp.storage, kimp.tms;
+import std.exception, std.signals, std.algorithm, std.array;
 
 /** 
  * Class for the StickBot managing
@@ -52,6 +52,9 @@ class StickBot : TelegramBot {
         logger.log ("Message recieved: ", msg.messageId);
 
         if (msg.forwardFrom !is null) processForwardedMessage (msg);
+        else if (msg.text.length) {
+            if (msg.text[0] == '/') processCommandMessage (msg);
+        }
     }
 
     /** 
@@ -64,6 +67,26 @@ class StickBot : TelegramBot {
 
         if (msg.text.length == 0) logger.warning (msg.messageId, " : empty message. Skip...");
         else createSticker (msg.chat, msg.forwardFrom, msg.text);
+    }
+
+    /** 
+     * Process message with command
+     * Params:
+     *   msg = Message for process
+     */
+    private void processCommandMessage (TelegramMessage msg) {
+        logger.log (msg.messageId, " : command message. Process...");
+
+        if (msg.text.count('@')) {
+            if (msg.text.split('@')[$ - 1].split(' ')[0] != this.bot().username()) {
+                logger.error (msg.messageId, " : this message does not for the @", this.bot().username());
+                return;
+            }
+        }
+
+        string command = msg.text.split('@')[0].split(' ')[0];
+
+        //if (command == "/start") this.sendMessage (msg.chat.id, _f("hello_msg", _("hello_msg"), msg.));
     }
 
     /** 
