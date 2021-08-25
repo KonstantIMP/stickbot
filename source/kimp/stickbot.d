@@ -138,6 +138,11 @@ class StickBot : TelegramBot {
      */
     private void callbackQueryRecieved (TelegramBot bot, TelegramCallbackQuery callback) {
         logger.log ("Callback query recieved: ", callback.id);
+
+        if (callback.data == "/help")
+            this.sendMessage (callback.message.chat.id, _f("help_msg", _("help_msg"), callback.message.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (callback.message.from.languageCode, callback.message.chat.type == "private"));
+    
+        this.answerCallbackQuery (callback.id);
     }
 
     /** 
