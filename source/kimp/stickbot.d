@@ -88,6 +88,8 @@ class StickBot : TelegramBot {
 
         if (command == "/start" && msg.chat.type == "private")
             this.sendMessage (msg.chat.id, _f("hello_msg", _("hello_msg"), msg.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (msg.from.languageCode));
+        else if (command == "/help")
+            this.sendMessage (msg.chat.id, _f("help_msg", _("help_msg"), msg.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (msg.from.languageCode, msg.chat.type == "private"));
     }
 
     /** 
@@ -147,7 +149,7 @@ class StickBot : TelegramBot {
         keyArr.length = 1; keyArr[0].length = 3;
         keyArr[0][0] = createBtn; keyArr[0][1] = helpBtn; keyArr[0][2] = donateBtn;
 
-        if (isPrivate == false) keyArr[0] = keyArr[0][1 .. 2];
+        if (isPrivate == false) keyArr[0] = keyArr[0][1 .. $];
 
         keyboard.inlineKeyboard = keyArr; return keyboard;
     }
