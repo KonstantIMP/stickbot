@@ -109,9 +109,9 @@ private:
     ///> Map with prebuilt color presets
     std::map<PresetColor, StickerPreset> presets = {
         {VIOLET, StickerPreset{"gradient:#0d324d-#7f5a83", "#ea8df7","white", "gradient:#5f0a87-#a4508b", "white"}},
-        {GREEN, StickerPreset{"gradient:#20ded3-#f6fba2", "#007B9D", "#4f4f4f", ""}},
-        {BLUE, StickerPreset{"gradient:#b621fe-#1fd1f9", "#1fd1f9", "white", ""}},
-        {WHITE, StickerPreset{"gradient:#fffcff-#d5fefd", "#6666ff", "#6495ed", ""}}
+        {GREEN, StickerPreset{"gradient:#20ded3-#f6fba2", "#007B9D", "#4f4f4f", "gradient:#0bab64-#3bb78f", "white"}},
+        {BLUE, StickerPreset{"gradient:#b621fe-#1fd1f9", "#1fd1f9", "white", "gradient:#009ffd-#2a2a72", "white"}},
+        {WHITE, StickerPreset{"gradient:#fffcff-#d5fefd", "#6666ff", "#6495ed", "gradient:#83eaf1-#63a4ff", "white"}}
     };
 
     ///> Contains sticker`s size
