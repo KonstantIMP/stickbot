@@ -5,7 +5,7 @@
  */
 module kimp.stickbot;
 
-import tg.bot, tg.type, di.i18n, kimp.log, kimp.storage, kimp.tms;
+import tg.bot, tg.type, tg.core.format, di.i18n, kimp.log, kimp.storage, kimp.tms;
 import std.exception, std.signals, std.algorithm, std.array;
 
 /** 
@@ -86,7 +86,8 @@ class StickBot : TelegramBot {
 
         string command = msg.text.split('@')[0].split(' ')[0];
 
-        //if (command == "/start") this.sendMessage (msg.chat.id, _f("hello_msg", _("hello_msg"), msg.));
+        if (command == "/start" && msg.chat.type == "private")
+            this.sendMessage (msg.chat.id, _f("hello_msg", _("hello_msg"), msg.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (msg.from.languageCode));
     }
 
     /** 
@@ -121,6 +122,34 @@ class StickBot : TelegramBot {
      */
     private void callbackQueryRecieved (TelegramBot bot, TelegramCallbackQuery callback) {
         logger.log ("Callback query recieved: ", callback.id);
+    }
+
+    /** 
+     * Generate keyboard for the start message
+     * Params:
+     *   languageCode = Language for keyboard translate
+     *   isPrivate = Set true if the keyboard for the private chat
+     * Returns: Generated keyboard
+     */
+    private TelegramInlineKeyboardMarkup generateStartKeyboard (string languageCode, bool isPrivate = true) {
+        TelegramInlineKeyboardMarkup keyboard = new TelegramInlineKeyboardMarkup();
+        auto keyArr = keyboard.inlineKeyboard();
+
+        auto createBtn = new TelegramInlineKeyboardButton();
+        createBtn.text = _f("create_btn", _("create_btn"), languageCode); createBtn.callbackData = "/create";
+
+        auto helpBtn = new TelegramInlineKeyboardButton();
+        helpBtn.text = _f("help_btn", _("help_btn"), languageCode); helpBtn.callbackData = "/help";
+
+        auto donateBtn = new TelegramInlineKeyboardButton();
+        donateBtn.text = _f("donate_btn", _("donate_btn"), languageCode); donateBtn.url = "https://sobe.ru/na/coffee_and_learning";
+
+        keyArr.length = 1; keyArr[0].length = 3;
+        keyArr[0][0] = createBtn; keyArr[0][1] = helpBtn; keyArr[0][2] = donateBtn;
+
+        if (isPrivate == false) keyArr[0] = keyArr[0][1 .. 2];
+
+        keyboard.inlineKeyboard = keyArr; return keyboard;
     }
 
     /** Local logger object */
