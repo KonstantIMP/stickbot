@@ -15,4 +15,4 @@ stickbot-test-*
 *.lst
 *.tmp
 compile_commands.json
-.cache
+.cache/
