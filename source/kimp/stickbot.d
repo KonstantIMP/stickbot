@@ -90,6 +90,20 @@ class StickBot : TelegramBot {
             this.sendMessage (msg.chat.id, _f("hello_msg", _("hello_msg"), msg.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (msg.from.languageCode));
         else if (command == "/help")
             this.sendMessage (msg.chat.id, _f("help_msg", _("help_msg"), msg.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (msg.from.languageCode, msg.chat.type == "private"));
+        else if (["/q", "/qg", "/qw", "/qb"].count(command)) {
+            if (msg.replyToMessage is null) logger.error (msg.messageId, " : /q* command without reply to");
+            else {
+                PresetColor preset = PresetColor.VIOLET;
+                if (command == "/qg") preset = PresetColor.GREEN;
+                else if (command == "/qw") preset = PresetColor.WHITE;
+                else if (command == "/qb") preset = PresetColor.BLUE;
+
+                createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text, preset);
+            }
+        }
+        else {
+            logger.error (msg.messageId, " : Incorrect command");
+        }
     }
 
     /** 
