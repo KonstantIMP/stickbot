@@ -21,7 +21,27 @@ class StickBot : TelegramBot {
         super(tocken); logger = new StickBotLogger();
         logger.log ("StickBot started: ", this.bot().firstName(), " (@", this.bot().username(), ')');
     
-        connectSignals ();
+        initBot(); connectSignals ();
+    }
+
+    /** 
+     * Init`s the bot params and commands
+     */
+    private void initBot () {
+        if (this.getWebhookInfo().url().length) {
+            logger.warning ("Webhook mode is enabled. Disabling...");
+            this.deleteWebhook(true);
+        }
+
+        logger.info ("Remove old commands.");
+        
+        auto defScope = new TelegramBotCommandScopeDefault(); defScope.type = "default";
+        auto adminScope = new TelegramBotCommandScopeAllChatAdministrators(); adminScope.type = "all_chat_administrators";
+    
+        foreach (l; I18n.getLoadedLocales() ~ "") {
+            this.deleteMyCommands(new TelegramBotCommandScope(defScope.getAsJson()), l);
+            this.deleteMyCommands(new TelegramBotCommandScope(adminScope.getAsJson()), l);
+        }
     }
 
     override public void loop (ulong delay = 500) {
