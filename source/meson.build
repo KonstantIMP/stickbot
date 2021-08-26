@@ -1,7 +1,7 @@
 stickbot_desp = [
     dependency ('requests', method: 'dub'),
     dependency ('cachetools', method: 'dub'),
-    dependency ('tg_d', method: 'dub'),
+    dependency ('tg_d', method: 'dub', version: '>=0.0.4'),
     dependency ('di', method: 'dub'),
     libtms_dep
 ]
@@ -9,8 +9,9 @@ stickbot_desp = [
 stickbot_source = [
     'app.d',
     'kimp/tms.d',
-    'kimp/loop.d',
-    'kimp/answer.d',
+    'kimp/stickbot.d',
+    'kimp/log.d',
+    'kimp/exit.d',
     'kimp/storage.d'
 ]
 

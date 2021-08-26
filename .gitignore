@@ -14,3 +14,5 @@ stickbot-test-*
 *.obj
 *.lst
 *.tmp
+compile_commands.json
+.cache/

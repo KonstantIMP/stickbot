@@ -20,6 +20,34 @@
         {
             "id" : "help_msg",
             "tr" : "Small user manual!\n\nHow to create the sticker? There are some ways to do that.\n\nUsing this chat : \n1. Forward message with the quote here and I will create the sticker\n2. Use \"🦄 Create\" button\n3. Send a command as a reply to the message with needed text (read more later)\n\nIn group chat\n1. Send a command as a reply to the message with needed text (read more later)\n\nSupported commands :/q - creates random sticker\n/qg - creates green sticker\n/qw - creates white sticker\n/qb - creates blue sticker\n/qv - creates violet sticker\n"
+        },
+        {
+            "id" : "create_callback",
+            "tr" : "Let`s create a new sticker!\nChoose a preset color for it."
+        },
+        {
+            "id" : "green_btn",
+            "tr" : "💸 Green"
+        },
+        {
+            "id" : "violet_btn",
+            "tr" : "🍆 Violet"
+        },
+        {
+            "id" : "blue_btn",
+            "tr" : "🐬 Blue"
+        },
+        {
+            "id" : "white_btn",
+            "tr" : "⛄ White"
+        },
+        {
+            "id" : "callback_request",
+            "tr" : "Send me a text as a reply to this message."
+        },
+        {
+            "id" : "callback_request_placeholder",
+            "tr" : "Write your text right here"
         }
     ]
 }
