@@ -11,6 +11,7 @@ stickbot_source = [
     'kimp/tms.d',
     'kimp/stickbot.d',
     'kimp/log.d',
+    'kimp/exit.d',
     'kimp/storage.d'
 ]
 
