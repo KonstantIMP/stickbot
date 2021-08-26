@@ -54,6 +54,18 @@ class StickBot : TelegramBot {
         if (msg.forwardFrom !is null) processForwardedMessage (msg);
         else if (msg.text.length) {
             if (msg.text[0] == '/') processCommandMessage (msg);
+            if (msg.replyToMessage !is null) {
+                if (msg.replyToMessage.text.length && msg.replyToMessage.from.id == bot.bot.id) {
+                    if (['|', '\\', '/', '-'].count(msg.replyToMessage.text[0])) {
+                        PresetColor preset = PresetColor.VIOLET;
+                        if (msg.replyToMessage.text[0] == '/') preset = PresetColor.GREEN;
+                        else if (msg.replyToMessage.text[0] == '\\') preset = PresetColor.BLUE;
+                        else if (msg.replyToMessage.text[0] == '-') preset = PresetColor.WHITE;
+
+                        createSticker (msg.chat, msg.from, msg.text, preset);
+                    } else logger.error (msg.messageId, " : Incorrect answer. Incorrect to");
+                } else logger.error (msg.messageId, " : Incorrect answer. Empty or reply");
+            }
         }
     }
 
@@ -144,15 +156,15 @@ class StickBot : TelegramBot {
         else if (callback.data == "/create")
             this.sendMessage (callback.message.chat.id, _f("create_callback", _("create_callback"), callback.message.from.languageCode), TextFormat.None, null, false, false, 0, false, generateColorKeyboard (callback.message.from.languageCode));
         else if (["/violet", "/green", "/white", "/blue"].count(callback.data)) {
-            string color = "🍆";
-            if (callback.data == "/green") color = "💸";
-            else if (callback.data == "/white") color = "⛄";
-            else if (callback.data == "/blue") color = "🐬";
+            string color = "| 🍆";
+            if (callback.data == "/green") color = "/ 💸";
+            else if (callback.data == "/white") color = "- ⛄";
+            else if (callback.data == "/blue") color = "\\ 🐬";
 
             auto fr = new TelegramForceReply ();
             fr.forceReply = true; fr.inputFieldPlaceholder = _f("callback_request_placeholder", _("callback_request_placeholder"), callback.message.from.languageCode);
         
-            color = color ~ "   " ~ _f("callback_request", _("callback_request"), callback.message.from.languageCode);
+            color = color ~ " " ~ _f("callback_request", _("callback_request"), callback.message.from.languageCode);
         
             this.sendMessage (callback.message.chat.id, color, TextFormat.None, null, false, false, 0, false, fr);
         }
