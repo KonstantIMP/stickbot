@@ -143,6 +143,20 @@ class StickBot : TelegramBot {
             this.sendMessage (callback.message.chat.id, _f("help_msg", _("help_msg"), callback.message.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (callback.message.from.languageCode, callback.message.chat.type == "private"));
         else if (callback.data == "/create")
             this.sendMessage (callback.message.chat.id, _f("create_callback", _("create_callback"), callback.message.from.languageCode), TextFormat.None, null, false, false, 0, false, generateColorKeyboard (callback.message.from.languageCode));
+        else if (["/violet", "/green", "/white", "/blue"].count(callback.data)) {
+            string color = "🍆";
+            if (callback.data == "/green") color = "💸";
+            else if (callback.data == "/white") color = "⛄";
+            else if (callback.data == "/blue") color = "🐬";
+
+            auto fr = new TelegramForceReply ();
+            fr.forceReply = true; fr.inputFieldPlaceholder = _f("callback_request_placeholder", _("callback_request_placeholder"), callback.message.from.languageCode);
+        
+            color = color ~ "   " ~ _f("callback_request", _("callback_request"), callback.message.from.languageCode);
+        
+            this.sendMessage (callback.message.chat.id, color, TextFormat.None, null, false, false, 0, false, fr);
+        }
+        else logger.error(callback.id, " : Incorrect callback query...");
 
         this.answerCallbackQuery (callback.id);
     }

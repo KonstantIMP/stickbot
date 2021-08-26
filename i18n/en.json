@@ -40,6 +40,14 @@
         {
             "id" : "white_btn",
             "tr" : "⛄ White"
+        },
+        {
+            "id" : "callback_request",
+            "tr" : "Send me a text as a reply to this message."
+        },
+        {
+            "id" : "callback_request_placeholder",
+            "tr" : "Write your text right here"
         }
     ]
 }
