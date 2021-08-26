@@ -141,7 +141,9 @@ class StickBot : TelegramBot {
 
         if (callback.data == "/help")
             this.sendMessage (callback.message.chat.id, _f("help_msg", _("help_msg"), callback.message.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (callback.message.from.languageCode, callback.message.chat.type == "private"));
-    
+        else if (callback.data == "/create")
+            this.sendMessage (callback.message.chat.id, _f("create_callback", _("create_callback"), callback.message.from.languageCode), TextFormat.None, null, false, false, 0, false, generateColorKeyboard (callback.message.from.languageCode));
+
         this.answerCallbackQuery (callback.id);
     }
 
@@ -169,6 +171,36 @@ class StickBot : TelegramBot {
         keyArr[0][0] = createBtn; keyArr[0][1] = helpBtn; keyArr[0][2] = donateBtn;
 
         if (isPrivate == false) keyArr[0] = keyArr[0][1 .. $];
+
+        keyboard.inlineKeyboard = keyArr; return keyboard;
+    }
+
+    /** 
+     * Creates keuboard for color choose
+     * Params:
+     *   languageCode = Language for i18n
+     * Returns: Generated keyboard
+     */
+    private TelegramInlineKeyboardMarkup generateColorKeyboard (string languageCode) {
+        auto keyboard = new TelegramInlineKeyboardMarkup();
+        auto keyArr = keyboard.inlineKeyboard();
+
+        auto vBtn = new TelegramInlineKeyboardButton ();
+        vBtn.text = _f("violet_btn", _("violet_btn"), languageCode); vBtn.callbackData = "/violet";
+
+        auto bBtn = new TelegramInlineKeyboardButton ();
+        bBtn.text = _f("blue_btn", _("blue_btn"), languageCode); bBtn.callbackData = "/blue";
+
+        auto wBtn = new TelegramInlineKeyboardButton ();
+        wBtn.text = _f("white_btn", _("white_btn"), languageCode); wBtn.callbackData = "/white";
+        
+        auto gBtn = new TelegramInlineKeyboardButton ();
+        gBtn.text = _f("green_btn", _("green_btn"), languageCode); gBtn.callbackData = "/green";
+
+        keyArr.length = 2; keyArr[0].length = keyArr[1].length = 2;
+
+        keyArr[0][0] = vBtn; keyArr[0][1] = bBtn;
+        keyArr[1][0] = wBtn; keyArr[1][1] = gBtn;
 
         keyboard.inlineKeyboard = keyArr; return keyboard;
     }
