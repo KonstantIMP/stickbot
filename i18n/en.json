@@ -48,6 +48,30 @@
         {
             "id" : "callback_request_placeholder",
             "tr" : "Write your text right here"
+        },
+        {
+            "id" : "q_desc",
+            "tr" : "Creates violet sticker"
+        },
+        {
+            "id" : "qg_desc",
+            "tr" : "Creates green sticker"
+        },
+        {
+            "id" : "qw_desc",
+            "tr" : "Creates white sticker"
+        },
+        {
+            "id" : "qb_desc",
+            "tr" : "Creates blue sticker"
+        },
+        {
+            "id" : "help_desc",
+            "tr" : "Shows the help message"
+        },
+        {
+            "id" : "add_desc",
+            "tr" : "Adds the sticker to the group set"
         }
     ]
 }

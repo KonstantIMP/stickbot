@@ -42,6 +42,30 @@ class StickBot : TelegramBot {
             this.deleteMyCommands(new TelegramBotCommandScope(defScope.getAsJson()), l);
             this.deleteMyCommands(new TelegramBotCommandScope(adminScope.getAsJson()), l);
         }
+
+        logger.info ("Adding default commands.");
+        TelegramBotCommand [] defCmds = new TelegramBotCommand [5];
+        for (ulong i = 0; i < 5; i++) defCmds[i] = new TelegramBotCommand;
+
+        foreach (l; I18n.getLoadedLocales()) {
+            defCmds[0].command = "/q"; defCmds[0].description = _f("q_desc", _("q_desc"), l);
+            defCmds[1].command = "/qg"; defCmds[1].description = _f("qg_desc", _("qg_desc"), l);
+            defCmds[2].command = "/qb"; defCmds[2].description = _f("qb_desc", _("qb_desc"), l);
+            defCmds[3].command = "/qw"; defCmds[3].description = _f("qw_desc", _("qw_desc"), l);
+            defCmds[4].command = "/help"; defCmds[4].description = _f("help_desc", _("help_desc"), l);
+        
+            this.setMyCommands (defCmds, new TelegramBotCommandScope(defScope.getAsJson()), l);
+        }
+
+        logger.info ("Adding admin commands.");
+        TelegramBotCommand [] adminCmds = new TelegramBotCommand [1];
+        for (ulong i = 0; i < 1; i++) adminCmds[i] = new TelegramBotCommand;
+
+        foreach (l; I18n.getLoadedLocales()) {
+            adminCmds[0].command = "/add"; adminCmds[0].description = _f("add_desc", _("add_desc"), l);
+        
+            this.setMyCommands (adminCmds ~ defCmds, new TelegramBotCommandScope(adminScope.getAsJson()), l);
+        }
     }
 
     override public void loop (ulong delay = 500) {
