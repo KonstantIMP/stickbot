@@ -68,10 +68,6 @@
         {
             "id" : "help_desc",
             "tr" : "Shows the help message"
-        },
-        {
-            "id" : "add_desc",
-            "tr" : "Adds the sticker to the group set"
         }
     ]
 }

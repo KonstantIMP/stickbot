@@ -36,11 +36,9 @@ class StickBot : TelegramBot {
         logger.info ("Remove old commands.");
         
         auto defScope = new TelegramBotCommandScopeDefault(); defScope.type = "default";
-        auto adminScope = new TelegramBotCommandScopeAllChatAdministrators(); adminScope.type = "all_chat_administrators";
     
         foreach (l; I18n.getLoadedLocales() ~ "") {
             this.deleteMyCommands(new TelegramBotCommandScope(defScope.getAsJson()), l);
-            this.deleteMyCommands(new TelegramBotCommandScope(adminScope.getAsJson()), l);
         }
 
         logger.info ("Adding default commands.");
@@ -55,16 +53,6 @@ class StickBot : TelegramBot {
             defCmds[4].command = "/help"; defCmds[4].description = _f("help_desc", _("help_desc"), l);
         
             this.setMyCommands (defCmds, new TelegramBotCommandScope(defScope.getAsJson()), l);
-        }
-
-        logger.info ("Adding admin commands.");
-        TelegramBotCommand [] adminCmds = new TelegramBotCommand [1];
-        for (ulong i = 0; i < 1; i++) adminCmds[i] = new TelegramBotCommand;
-
-        foreach (l; I18n.getLoadedLocales()) {
-            adminCmds[0].command = "/add"; adminCmds[0].description = _f("add_desc", _("add_desc"), l);
-        
-            this.setMyCommands (adminCmds ~ defCmds, new TelegramBotCommandScope(adminScope.getAsJson()), l);
         }
     }
 
