@@ -3,7 +3,7 @@
     "tr" : [
         {
             "id" : "hello_msg",
-            "tr" : "Welcome to the StickBot!\n\nThis bot can create beautiful stickers from your messages. You can send text to me or add me to the group chat. I will create sticker from forwarded messages.\n\nLet`s go!\n"
+            "tr" : "Welcome! I am StickBot!\n\nI can create beautiful stickers from your messages. Forward the text to me or add me to a group chat.\n\nLet`s go!\n"
         },
         {
             "id" : "create_btn",
@@ -19,7 +19,7 @@
         },
         {
             "id" : "help_msg",
-            "tr" : "Small user manual!\n\nHow to create the sticker? There are some ways to do that.\n\nUsing this chat : \n1. Forward message with the quote here and I will create the sticker\n2. Use \"🦄 Create\" button\n3. Send a command as a reply to the message with needed text (read more later)\n\nIn group chat\n1. Send a command as a reply to the message with needed text (read more later)\n\nSupported commands :/q - creates random sticker\n/qg - creates green sticker\n/qw - creates white sticker\n/qb - creates blue sticker\n/qv - creates violet sticker\n"
+            "tr" : "Small user manual!\n\nHow to create a sticker? There are some ways to do that.\n\nUsing the chat with me : \n1. Forward the message with the quote to me and I will create the sticker\n2. Use \"🦄 Create\" button\n3. Send a command as a reply to the message with the needed text (read more later)\n\nIn a group chat\n1. Send a command as a reply to the message with the needed text (read more later)\n\nSupported commands :\n/q - creates random sticker\n/qg - creates green sticker\n/qw - creates white sticker\n/qb - creates blue sticker\n"
         },
         {
             "id" : "create_callback",
