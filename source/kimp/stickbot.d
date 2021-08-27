@@ -54,6 +54,8 @@ class StickBot : TelegramBot {
         
             this.setMyCommands (defCmds, new TelegramBotCommandScope(defScope.getAsJson()), l);
         }
+
+        I18n.setCurrentLocale("en");
     }
 
     override public void loop (ulong delay = 500) {
