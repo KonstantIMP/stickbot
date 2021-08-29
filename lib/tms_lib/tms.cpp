@@ -44,7 +44,7 @@ void kimp::Sticker::addText(const std::string text) {
     std::unique_ptr<Magick::Image> q = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(STICKER_SIZE - 50 - AVATAR_SIZE - 20, STICKER_SIZE - 50 - 28 - 12), Magick::Color("transparent")));
 
     q->magick("png");
-    q->fontFamily("Roboto, Regular");
+    q->font("./Roboto-Emoji.ttf");
     q->fontPointsize(22);
     q->fillColor(presets[stickerPreset].quoteColor);
     q->backgroundColor(Magick::Color("transparent"));
@@ -81,7 +81,7 @@ void kimp::Sticker::genAvatar (const std::string author) {
         else if (i.length() > 2) initials += i.substr(0, 2);
     }
 
-    avt->fontFamily("Roboto, Regular"); avt->fontPointsize(26);
+    avt->font("./Roboto-Emoji.ttf"); avt->fontPointsize(26);
     avt->fillColor(presets[stickerPreset].avatarColor);
     avt->backgroundColor(Magick::Color("transparent"));
     avt->textGravity(MagickCore::CenterGravity);
@@ -101,7 +101,7 @@ void kimp::Sticker::addNickname (const std::string author) {
     std::unique_ptr<Magick::Image> n = std::unique_ptr<Magick::Image>(new Magick::Image(Magick::Geometry(STICKER_SIZE - AVATAR_SIZE - 2 * PADDING_SIZE - MARGIN_SIZE, MARGIN_SIZE * 1.5), Magick::Color("transparent")));
 
     n->magick("png");
-    n->fontFamily("Roboto, Regular");
+    n->font("./Roboto-Emoji.ttf");
     n->fontPointsize(26);
     n->fillColor(presets[stickerPreset].nicknameColor);
     n->backgroundColor(Magick::Color("transparent"));
