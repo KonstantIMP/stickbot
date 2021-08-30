@@ -86,7 +86,7 @@ class StickBot : TelegramBot {
         logger.log ("Message recieved: ", msg.messageId);
 
         if (msg.forwardFrom !is null) processForwardedMessage (msg);
-        else if (msg.text.length) {
+        else if (msg.text.length + msg.caption.length) {
             if (msg.text[0] == '/') processCommandMessage (msg);
             if (msg.replyToMessage !is null) {
                 if (msg.replyToMessage.text.length && msg.replyToMessage.from.id == bot.bot.id) {
@@ -96,7 +96,7 @@ class StickBot : TelegramBot {
                         else if (msg.replyToMessage.text[0] == '\\') preset = PresetColor.BLUE;
                         else if (msg.replyToMessage.text[0] == '-') preset = PresetColor.WHITE;
 
-                        createSticker (msg.chat, msg.from, msg.text, preset);
+                        createSticker (msg.chat, msg.from, msg.text ~ msg.caption, preset);
                     } else logger.error (msg.messageId, " : Incorrect answer. Incorrect to");
                 } else logger.error (msg.messageId, " : Incorrect answer. Empty or reply");
             }
@@ -111,8 +111,8 @@ class StickBot : TelegramBot {
     private void processForwardedMessage (TelegramMessage msg) {
         logger.log (msg.messageId, " : forwarded message. Process...");
 
-        if (msg.text.length == 0) logger.warning (msg.messageId, " : empty message. Skip...");
-        else createSticker (msg.chat, msg.forwardFrom, msg.text);
+        if (msg.text.length + msg.caption.length == 0) logger.warning (msg.messageId, " : empty message. Skip...");
+        else createSticker (msg.chat, msg.forwardFrom, msg.text ~ msg.caption);
     }
 
     /** 
@@ -144,7 +144,7 @@ class StickBot : TelegramBot {
                 else if (command == "/qw") preset = PresetColor.WHITE;
                 else if (command == "/qb") preset = PresetColor.BLUE;
 
-                createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text, preset);
+                createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text ~ msg.replyToMessage.caption, preset);
             }
         }
         else {
