@@ -85,8 +85,10 @@ class StickBot : TelegramBot {
     private void messageRecieved (TelegramBot bot, TelegramMessage msg) {
         logger.log ("Message recieved: ", msg.messageId);
 
+        msg.text = msg.text ~ msg.caption;
+
         if (msg.forwardFrom !is null) processForwardedMessage (msg);
-        else if (msg.text.length + msg.caption.length) {
+        else if (msg.text.length) {
             if (msg.text[0] == '/') processCommandMessage (msg);
             if (msg.replyToMessage !is null) {
                 if (msg.replyToMessage.text.length && msg.replyToMessage.from.id == bot.bot.id) {
@@ -96,7 +98,7 @@ class StickBot : TelegramBot {
                         else if (msg.replyToMessage.text[0] == '\\') preset = PresetColor.BLUE;
                         else if (msg.replyToMessage.text[0] == '-') preset = PresetColor.WHITE;
 
-                        createSticker (msg.chat, msg.from, msg.text ~ msg.caption, preset);
+                        createSticker (msg.chat, msg.from, msg.text, preset);
                     } else logger.error (msg.messageId, " : Incorrect answer. Incorrect to");
                 } else logger.error (msg.messageId, " : Incorrect answer. Empty or reply");
             }
@@ -111,8 +113,8 @@ class StickBot : TelegramBot {
     private void processForwardedMessage (TelegramMessage msg) {
         logger.log (msg.messageId, " : forwarded message. Process...");
 
-        if (msg.text.length + msg.caption.length == 0) logger.warning (msg.messageId, " : empty message. Skip...");
-        else createSticker (msg.chat, msg.forwardFrom, msg.text ~ msg.caption);
+        if (msg.text.length == 0) logger.warning (msg.messageId, " : empty message. Skip...");
+        else createSticker (msg.chat, msg.forwardFrom, msg.text);
     }
 
     /** 
@@ -138,7 +140,7 @@ class StickBot : TelegramBot {
             this.sendMessage (msg.chat.id, _f("help_msg", _("help_msg"), msg.from.languageCode), TextFormat.None, null, false, false, 0, false, generateStartKeyboard (msg.from.languageCode, msg.chat.type == "private"));
         else if (["/q", "/qg", "/qw", "/qb"].count(command)) {
             if (msg.replyToMessage is null) logger.error (msg.messageId, " : /q* command without reply to");
-            else if (msg.replyToMessage.text.length + msg.replyToMessage.caption.length) {
+            else if (msg.replyToMessage.text.length) {
                 PresetColor preset = PresetColor.VIOLET;
                 if (command == "/qg") preset = PresetColor.GREEN;
                 else if (command == "/qw") preset = PresetColor.WHITE;
@@ -156,10 +158,10 @@ class StickBot : TelegramBot {
 
                 if (msg.photo !is null) {
                     if (msg.photo.length) {
-                        createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text ~ msg.replyToMessage.caption, preset, msg.photo[0]);
+                        createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text, preset, msg.photo[0]);
                     }
                 }
-                else createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text ~ msg.replyToMessage.caption, preset);
+                else createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text, preset);
             } else logger.error (msg.messageId, " : empty reply");
         }
         else {
