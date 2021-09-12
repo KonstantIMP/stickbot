@@ -144,7 +144,22 @@ class StickBot : TelegramBot {
                 else if (command == "/qw") preset = PresetColor.WHITE;
                 else if (command == "/qb") preset = PresetColor.BLUE;
 
-                createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text ~ msg.replyToMessage.caption, preset);
+                auto fullCmd = msg.text.split(' ');
+                if (fullCmd.length > 1) {
+                    string newName = "";
+                    for (ulong i = 1; i < fullCmd.length; i++) {
+                        newName ~= fullCmd[i] ~ " ";
+                    }
+                    msg.replyToMessage.from.firstName = newName;
+                    msg.replyToMessage.from.lastName = "";
+                }
+
+                if (msg.photo !is null) {
+                    if (msg.photo.length) {
+                        createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text ~ msg.replyToMessage.caption, preset, msg.photo[0]);
+                    }
+                }
+                else createSticker (msg.chat, msg.replyToMessage.from, msg.replyToMessage.text ~ msg.replyToMessage.caption, preset);
             } else logger.error (msg.messageId, " : empty reply");
         }
         else {
@@ -159,15 +174,21 @@ class StickBot : TelegramBot {
      *   author = Author of the quote
      *   text = The quote
      *   preset = Color preset for the stick
+     *   customPhoto = Custom avatar for the quote
      */
-    private void createSticker (TelegramChat to, TelegramUser author, string text, PresetColor preset = PresetColor.VIOLET) {
+    private void createSticker (TelegramChat to, TelegramUser author, string text, PresetColor preset = PresetColor.VIOLET, TelegramPhotoSize customPhoto = null) {
         import std.file : write;
 
         string avatar = TmpStorage.genTmpFile (), sticker = TmpStorage.genTmpFile ();
 
-        auto photos = this.getUserProfilePhotos(author.id);
-        if (photos.totalCount) write (avatar, this.downloadFile(this.getFile(photos.photos[0][$ - 1].fileId)));
-        else avatar = "";
+        if (customPhoto !is null) {
+            write (avatar, this.downloadFile(this.getFile(customPhoto.fileId)));
+        }
+        else {
+            auto photos = this.getUserProfilePhotos(author.id);
+            if (photos.totalCount) write (avatar, this.downloadFile(this.getFile(photos.photos[0][$ - 1].fileId)));
+            else avatar = "";
+        }
 
         string fullName = author.firstName ~ " " ~ author.lastName ~ '\0';
         Sticker.createSticker (preset, fullName.ptr, (avatar ~ '\0').ptr, (text ~ '\0').ptr, (sticker ~ '\0').ptr);
